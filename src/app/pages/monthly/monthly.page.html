@@ -1,0 +1,77 @@
+<mat-card class="card">
+  <mat-card-header>
+    <mat-card-title>Agenda mensual</mat-card-title>
+    <mat-card-subtitle>
+      {{ profile().fullName }} · Año {{ profile().targetYear }}
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="topbar">
+      <div class="controls">
+        <mat-form-field appearance="outline">
+          <mat-label>Mes</mat-label>
+          <mat-select [value]="selectedMonth()" (selectionChange)="selectedMonth.set($event.value)">
+            <mat-option *ngFor="let m of months" [value]="m.value">{{ m.label }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="meta">
+          <div class="mp-badge" [class.master]="agenda().monthPersonalIsMaster">
+            Mes personal: <b>{{ agenda().monthPersonal }}</b>
+            <span class="badge" *ngIf="agenda().monthPersonalIsMaster">11/22</span>
+          </div>
+          <div class="mp-sub">{{ agenda().monthLabel }}</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button mat-stroked-button (click)="exportPdf()" [disabled]="exporting()">
+          {{ exporting() ? 'Generando PDF...' : 'Exportar a PDF (1 mes por hoja)' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Vista normal (pantalla) -->
+    <div class="screen-month">
+      <app-month-calendar
+        [agenda]="agenda()"
+        [highlightToday]="highlightToday()"
+        [todayISO]="todayISO()"
+      />
+    </div>
+
+    <!-- DOM offscreen: solo se renderiza durante export para que el mes “llene” la hoja -->
+    <div class="export-root" *ngIf="exporting()" aria-hidden="true">
+      <section class="pdf-page pdf-a4-landscape" #pdfPage>
+        <header class="pdf-header">
+          <div class="pdf-title">Agenda Numerológica Personal</div>
+          <div class="pdf-sub">
+            {{ profile().fullName }} · {{ profile().targetYear }} · {{ agenda().monthLabel }}
+          </div>
+        </header>
+
+        <div class="pdf-meta">
+          <div class="pill" [class.master]="agenda().monthPersonalIsMaster">
+            <span class="pill-label">Mes personal</span>
+            <span class="pill-value">{{ agenda().monthPersonal }}</span>
+            <span class="pill-badge" *ngIf="agenda().monthPersonalIsMaster">11/22</span>
+          </div>
+
+          <div class="fine">Generado desde la app · Uso personal</div>
+        </div>
+
+        <app-month-calendar
+          [agenda]="agenda()"
+          [highlightToday]="highlightToday()"
+          [todayISO]="todayISO()"
+        />
+
+        <footer class="pdf-footer">
+          <div class="fine">© Agenda numerológica</div>
+          <div class="fine">{{ agenda().monthLabel }} · {{ profile().targetYear }}</div>
+        </footer>
+      </section>
+    </div>
+  </mat-card-content>
+</mat-card>

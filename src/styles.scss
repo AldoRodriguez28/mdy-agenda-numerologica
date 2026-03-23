@@ -1,0 +1,26 @@
+:root {
+  --paper: #ffffff;
+  --ink: #141414;
+  --muted: rgba(20, 20, 20, 0.72);
+
+  --surface: rgba(20, 20, 20, 0.02);
+  --border: rgba(20, 20, 20, 0.08);
+
+  --accent: #1a1a1a;
+  --accent-soft: rgba(26, 26, 26, 0.12);
+
+  --toolbar-bg: #ffffff;
+  --toolbar-fg: #141414;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body.pdf-exporting {
+  mat-card { box-shadow: none !important; }
+
+  .page { padding: 10px; border-radius: 10px; }
+  .page-header { margin-bottom: 10px; padding-bottom: 8px; }
+
+  .calendar.compact .cell { min-height: 52px; padding: 7px; }
+  .calendar.compact .dp .value { font-size: 15px; }
+}

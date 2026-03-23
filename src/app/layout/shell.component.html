@@ -1,0 +1,22 @@
+<mat-toolbar class="toolbar">
+  <div class="brand">
+    <mat-icon>auto_awesome</mat-icon>
+    <span>Numerología</span>
+  </div>
+
+  <span class="spacer"></span>
+
+  <ng-container *ngIf="hasProfile()">
+    <a mat-button routerLink="/cover">Portada</a>
+    <a mat-button routerLink="/calculations">Cálculos</a>
+    <a mat-button routerLink="/monthly">Agenda mensual</a>
+    <a mat-button routerLink="/year">Año completo</a>
+    <button mat-button (click)="reset()">Reiniciar</button>
+  </ng-container>
+
+  <a mat-button routerLink="/setup" *ngIf="!hasProfile()">Iniciar</a>
+</mat-toolbar>
+
+<main class="container">
+  <router-outlet />
+</main>

@@ -1,0 +1,211 @@
+/* Calendario (base) */
+.calendar {
+  position: relative;
+  display: grid;
+  gap: 10px;
+}
+
+/* Capa artística dentro del calendario (invade sin tapar) */
+.calendar::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  pointer-events: none;
+  z-index: 0;
+
+  /* Por defecto apagado (se enciende por tema) */
+  opacity: 0;
+
+  background-image: var(--art-url);
+  background-size: 160%;
+  background-position: 55% 45%;
+  background-repeat: no-repeat;
+
+  /* máscara suave: entra desde el lado izquierdo */
+  -webkit-mask-image: radial-gradient(
+    circle at 18% 50%,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0) 68%
+  );
+  mask-image: radial-gradient(
+    circle at 18% 50%,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0) 68%
+  );
+
+  /* suaviza para que no compita con texto */
+  filter: saturate(1.05) contrast(1.02);
+  transform: scale(1.01);
+}
+
+/* Activa arte solo en tema tree (puedes duplicar para otros temas si quieres) */
+:root[data-theme="tree"] .calendar::before {
+  opacity: 0.14;
+}
+
+/* Contenido arriba de la capa artística */
+.weekdays,
+.grid {
+  position: relative;
+  z-index: 1;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.weekday {
+  text-align: center;
+  font-weight: 700;
+  opacity: 0.75;
+  font-size: 12px;
+  color: var(--ink);
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+/* Celda base */
+.cell {
+  border-radius: 14px;
+  min-height: 92px;
+  padding: 10px;
+
+  /* PDF-safe: colores simples (html2canvas friendly) */
+  background: rgba(255, 255, 255, 0.90);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Vacías */
+.cell.empty {
+  background: transparent;
+  border-color: transparent;
+}
+
+/* Día */
+.cell.day {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Maestro */
+.cell.day.master {
+  border-color: var(--accent-soft, rgba(0, 0, 0, 0.14));
+  background: rgba(255, 255, 255, 0.88);
+}
+
+/* Hoy */
+.cell.day.today {
+  outline: 2px solid var(--accent, rgba(0, 0, 0, 0.18));
+  outline-offset: 1px;
+}
+
+/* Header de la celda */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dom {
+  font-weight: 900;
+  font-size: 14px;
+  color: var(--ink);
+  opacity: 0.95;
+}
+
+.badge {
+  font-size: 11px;
+  opacity: 0.8;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 2px 6px;
+  border-radius: 999px;
+
+  /* Pequeño acento sin romper PDF */
+  background: rgba(255, 255, 255, 0.85);
+}
+
+/* Día personal */
+.dp {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.1;
+}
+
+.dp .label {
+  font-size: 11px;
+  opacity: 0.72;
+  color: var(--ink);
+}
+
+.dp .value {
+  font-size: 18px;
+  font-weight: 950;
+  color: var(--ink);
+}
+
+/* -----------------------
+   Modo compacto (mini)
+------------------------ */
+.calendar.compact {
+  gap: 8px;
+}
+
+.calendar.compact .weekdays {
+  gap: 6px;
+}
+
+.calendar.compact .weekday {
+  font-size: 11px;
+  opacity: 0.68;
+}
+
+.calendar.compact .grid {
+  gap: 6px;
+}
+
+.calendar.compact .cell {
+  min-height: 62px;
+  padding: 8px;
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(0, 0, 0, 0.055);
+}
+
+.calendar.compact .dp .label {
+  display: none; /* en compacto solo el valor */
+}
+
+.calendar.compact .dp .value {
+  font-size: 16px;
+}
+
+/* Ajustes para “vendible” */
+.calendar.compact .cell.day.today {
+  outline: 2px solid var(--accent, rgba(0, 0, 0, 0.16));
+}
+
+.calendar.compact .cell.day.master {
+  border-color: var(--accent-soft, rgba(0, 0, 0, 0.14));
+}
+
+/* -----------------------
+   Export PDF (opcional)
+------------------------ */
+body.pdf-exporting .calendar::before {
+  /* en PDF conviene un pelín menos para máxima legibilidad */
+  opacity: 0.12;
+}
+
+body.pdf-exporting .cell {
+  box-shadow: none !important;
+}

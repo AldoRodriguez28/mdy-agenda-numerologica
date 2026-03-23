@@ -1,0 +1,29 @@
+<div class="calendar" [class.compact]="compact">
+  <div class="weekdays">
+    <div class="weekday" *ngFor="let w of weekDays">{{ w }}</div>
+  </div>
+
+  <div class="grid">
+    <ng-container *ngFor="let c of cells">
+      <div class="cell empty" *ngIf="c.kind === 'empty'"></div>
+
+      <div
+        class="cell day"
+        *ngIf="c.kind === 'day'"
+        [class.master]="c.isMaster"
+        [class.today]="c.isToday"
+        [attr.data-iso]="c.dateISO"
+      >
+        <div class="top">
+          <span class="dom">{{ c.dayOfMonth }}</span>
+          <span class="badge" *ngIf="c.isMaster">11/22</span>
+        </div>
+
+        <div class="dp">
+          <span class="label" *ngIf="!compact">Día personal</span>
+          <span class="value">{{ c.dayPersonal }}</span>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

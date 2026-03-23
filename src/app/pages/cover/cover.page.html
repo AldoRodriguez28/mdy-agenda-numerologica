@@ -1,0 +1,24 @@
+<mat-card class="cover">
+  <div class="frame">
+    <div class="ornament top"></div>
+    <div class="ornament bottom"></div>
+
+    <div class="content">
+      <h1 class="title">Agenda Numerológica Personal</h1>
+      <h2 class="subtitle">{{ name() }}</h2>
+      <div class="year">{{ year() }}</div>
+
+      <div class="photo">
+        <img *ngIf="photo()" [src]="photo()!" alt="Foto personal" />
+        <div *ngIf="!photo()" class="placeholder">Foto</div>
+      </div>
+
+      <p class="note">Portada generada a partir de tus datos.</p>
+
+      <div class="actions">
+        <a mat-stroked-button routerLink="/setup">Editar datos</a>
+        <a mat-flat-button color="primary" routerLink="/calculations">Ver cálculos</a>
+      </div>
+    </div>
+  </div>
+</mat-card>

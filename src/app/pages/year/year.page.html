@@ -1,0 +1,49 @@
+<mat-card class="card">
+  <mat-card-header>
+    <mat-card-title>Agenda · Año completo</mat-card-title>
+    <mat-card-subtitle>
+      {{ profile().fullName }} · Año {{ profile().targetYear }}
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="actions">
+      <button mat-stroked-button (click)="exportPdf()" [disabled]="exporting()">
+        {{ exporting() ? 'Generando PDF...' : 'Exportar a PDF (1 mes por hoja)' }}
+      </button>
+    </div>
+
+    <div class="pages">
+      <section class="page" *ngFor="let m of pages(); let i = index" #pdfPage>
+        <div class="page-bg"></div>
+
+        <header class="page-header">
+          <div class="brand">
+            <div class="mark">✦</div>
+            <div class="brand-text">
+              <div class="title">Agenda Numerológica Personal</div>
+              <div class="sub">{{ profile().fullName }} · {{ profile().targetYear }} · {{ m.monthLabel }}</div>
+            </div>
+          </div>
+
+          <div class="meta">
+            <div class="meta-chip">Mes {{ m.month }} / 12</div>
+          </div>
+        </header>
+
+        <!-- ✅ Un mes por hoja y NO compacto para que se vea grande -->
+        <app-mini-month-card
+          [agenda]="m"
+          [compact]="false"
+          [highlightToday]="highlightToday()"
+          [todayISO]="todayISO()"
+        />
+
+        <footer class="page-footer">
+          <div class="fine">© Agenda numerológica · Uso personal</div>
+          <div class="fine">Hoja {{ i + 1 }} / {{ pages().length }}</div>
+        </footer>
+      </section>
+    </div>
+  </mat-card-content>
+</mat-card>

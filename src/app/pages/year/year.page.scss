@@ -1,0 +1,159 @@
+.card {
+  width: 100%;
+  border-radius: 18px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.pages {
+  display: grid;
+  gap: 16px;
+}
+
+.page {
+  position: relative;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 20px;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.page-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.75;
+  background:
+    radial-gradient(700px 220px at 15% 0%, rgba(0,0,0,0.035), transparent 60%),
+    radial-gradient(700px 260px at 85% 100%, rgba(0,0,0,0.02), transparent 60%),
+    linear-gradient(180deg, rgba(0,0,0,0.01), transparent 40%, rgba(0,0,0,0.01));
+}
+
+.page-header {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: rgba(0,0,0,0.02);
+  font-weight: 900;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.sub {
+  margin-top: 2px;
+  opacity: 0.75;
+  font-size: 12px;
+}
+
+.meta-chip {
+  font-size: 11px;
+  opacity: 0.8;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: rgba(0,0,0,0.02);
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.page-footer {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+.fine {
+  font-size: 11px;
+  opacity: 0.65;
+}
+
+/* ✅ Ajustes SOLO exportación */
+body.pdf-exporting {
+  mat-card { box-shadow: none !important; }
+
+  .page { padding: 12px; border-radius: 12px; }
+}
+
+.page {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 16px;
+  overflow: hidden;
+}
+
+/* Fondo general con la imagen (muy tenue) */
+.page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--art-url);
+  background-size: cover;
+  background-position: center;
+  opacity: var(--art-opacity, 0);
+  filter: saturate(1.05) contrast(1.02);
+  pointer-events: none;
+  z-index: 0;
+
+  /* Difumina para que no compita con el texto */
+  transform: scale(1.02);
+}
+
+/* “Invasión” artística arriba-derecha (más notoria) */
+.page::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -60px;
+  width: 520px;
+  height: 520px;
+  background-image: var(--art-url);
+  background-size: 140%;
+  background-position: 80% 10%;
+  opacity: calc(var(--art-opacity, 0) + 0.10);
+  pointer-events: none;
+  z-index: 1;
+
+  /* máscara para que se desvanezca y no tape */
+  -webkit-mask-image: radial-gradient(circle at 30% 30%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.0) 68%);
+  mask-image: radial-gradient(circle at 30% 30%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.0) 68%);
+}
+
+/* Asegura que todo el contenido quede arriba */
+.page-header,
+app-mini-month-card,
+.page-footer {
+  position: relative;
+  z-index: 2;
+}

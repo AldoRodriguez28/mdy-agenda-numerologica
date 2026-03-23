@@ -1,0 +1,118 @@
+<mat-card class="card">
+  <mat-card-header>
+    <mat-card-title>Cálculos Numerológicos</mat-card-title>
+    <mat-card-subtitle>Desarrollados paso a paso desde tu fecha de nacimiento.</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <section class="section" *ngIf="coreItems().length">
+      <div class="items">
+        <ng-container *ngFor="let item of coreItems()">
+          <div class="item">
+            <div class="head">
+              <div>
+                <div class="k">{{ item.title }}</div>
+                <div class="d">{{ item.description }}</div>
+              </div>
+
+              <div class="v">
+                <span class="raw">Base: {{ item.rawValue }}</span>
+                <span class="res">Resultado: {{ item.reduction?.reduced }}</span>
+              </div>
+            </div>
+
+            <div class="steps" *ngIf="item.reduction">
+              <div class="step" *ngFor="let s of item.reduction.steps">{{ s }}</div>
+              <div class="final" *ngIf="item.reduction.steps.length === 0">No requiere reducción.</div>
+              <div class="master" *ngIf="item.reduction.isMaster">* Se respetó número maestro (11/22).</div>
+            </div>
+
+            <mat-divider></mat-divider>
+          </div>
+        </ng-container>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3 class="h3">Año, mes y día personal</h3>
+
+      <div class="item">
+        <div class="head">
+          <div>
+            <div class="k">{{ yearPersonal().title }}</div>
+            <div class="d">{{ yearPersonal().description }}</div>
+          </div>
+
+          <div class="v">
+            <span class="raw">Base: {{ yearPersonal().rawValue }}</span>
+            <span class="res">Resultado: {{ yearPersonal().reduction?.reduced }}</span>
+          </div>
+        </div>
+
+        <div class="steps" *ngIf="yearPersonal().reduction">
+          <div class="step" *ngFor="let s of yearPersonal().reduction!.steps">{{ s }}</div>
+          <div class="master" *ngIf="yearPersonal().reduction!.isMaster">* Maestro (11/22).</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <mat-form-field appearance="outline">
+          <mat-label>Mes en cuestión</mat-label>
+          <mat-select [value]="month()" (selectionChange)="month.set($event.value)">
+            <mat-option *ngFor="let m of months" [value]="m.value">{{ m.label }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Día calendario</mat-label>
+          <input
+            matInput
+            type="number"
+            [value]="day()"
+            (input)="day.set(toInt(($any($event.target).value)))"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="grid2">
+        <mat-card class="mini">
+          <div class="mini-pad">
+            <div class="k">{{ monthPersonal().title }}</div>
+            <div class="d">{{ monthPersonal().description }}</div>
+
+            <div class="mini-body">
+              <div><b>Base:</b> {{ monthPersonal().rawValue }}</div>
+              <div><b>Resultado:</b> {{ monthPersonal().reduction?.reduced }}</div>
+
+              <div class="mini-steps" *ngIf="monthPersonal().reduction">
+                <div class="step" *ngFor="let s of monthPersonal().reduction!.steps">{{ s }}</div>
+                <div class="master" *ngIf="monthPersonal().reduction!.isMaster">* Maestro (11/22)</div>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+
+        <mat-card class="mini">
+          <div class="mini-pad">
+            <div class="k">{{ dayPersonal().title }}</div>
+            <div class="d">{{ dayPersonal().description }}</div>
+
+            <div class="mini-body">
+              <div><b>Base:</b> {{ dayPersonal().rawValue }}</div>
+              <div><b>Resultado:</b> {{ dayPersonal().reduction?.reduced }}</div>
+
+              <div class="mini-steps" *ngIf="dayPersonal().reduction">
+                <div class="step" *ngFor="let s of dayPersonal().reduction!.steps">{{ s }}</div>
+                <div class="master" *ngIf="dayPersonal().reduction!.isMaster">* Maestro (11/22)</div>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+      <p class="hint">
+        <b>Regla:</b> El día personal se calcula sumando al mes personal el día calendario reducido (respetando 11/22).
+      </p>
+    </section>
+  </mat-card-content>
+</mat-card>

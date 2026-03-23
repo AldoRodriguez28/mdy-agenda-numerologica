@@ -1,0 +1,29 @@
+<mat-card
+  class="mini"
+  [class.seasonal]="isSeasonal()"
+  [attr.data-season]="season()"
+>
+  <div class="mini-bg"></div>
+
+  <header class="header">
+    <div class="left">
+      <div class="month-name">{{ agenda.monthLabel }}</div>
+      <div class="caption">Año {{ agenda.year }}</div>
+    </div>
+
+    <div class="right">
+      <div class="pill" [class.master]="agenda.monthPersonalIsMaster">
+        <span class="pill-label">Mes personal</span>
+        <span class="pill-value">{{ agenda.monthPersonal }}</span>
+        <span class="pill-badge" *ngIf="agenda.monthPersonalIsMaster">11/22</span>
+      </div>
+    </div>
+  </header>
+
+  <app-month-calendar
+    [agenda]="agenda"
+    [compact]="compact"
+    [highlightToday]="highlightToday"
+    [todayISO]="todayISO"
+  />
+</mat-card>
