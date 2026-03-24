@@ -1,4 +1,4 @@
-<mat-card class="card">
+<mat-card class="card monthly" [class.seasonal]="isSeasonal()" [attr.data-season]="season()">
   <mat-card-header>
     <mat-card-title>Agenda mensual</mat-card-title>
     <mat-card-subtitle>
@@ -43,7 +43,7 @@
 
     <!-- DOM offscreen: solo se renderiza durante export para que el mes “llene” la hoja -->
     <div class="export-root" *ngIf="exporting()" aria-hidden="true">
-      <section class="pdf-page pdf-a4-landscape" #pdfPage>
+      <section class="pdf-page pdf-a4-landscape monthly" [class.seasonal]="isSeasonal()" [attr.data-season]="season()" #pdfPage>
         <header class="pdf-header">
           <div class="pdf-title">Agenda Numerológica Personal</div>
           <div class="pdf-sub">
