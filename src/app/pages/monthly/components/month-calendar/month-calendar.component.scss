@@ -3,6 +3,7 @@
   position: relative;
   display: grid;
   gap: 10px;
+  font-family: var(--font-body);
 }
 
 /* Capa artística dentro del calendario (invade sin tapar) */
@@ -14,7 +15,7 @@
   z-index: 0;
 
   /* Por defecto apagado (se enciende por tema) */
-  opacity: 0;
+  opacity: var(--art-opacity, 0);
 
   background-image: var(--art-url);
   background-size: 160%;
@@ -38,10 +39,18 @@
   transform: scale(1.01);
 }
 
-/* Activa arte solo en tema tree (puedes duplicar para otros temas si quieres) */
-:root[data-theme="tree"] .calendar::before {
-  opacity: 0.14;
+/* Capa suavizante para mejorar legibilidad sobre arte */
+.calendar::after {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  pointer-events: none;
+  z-index: 0;
+  background: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(0px);
 }
+
+/* La opacidad se controla por tema con --art-opacity */
 
 /* Contenido arriba de la capa artística */
 .weekdays,
@@ -60,8 +69,9 @@
   text-align: center;
   font-weight: 700;
   opacity: 0.75;
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--ink);
+  letter-spacing: 0.02em;
 }
 
 /* Grid */
@@ -73,13 +83,14 @@
 
 /* Celda base */
 .cell {
-  border-radius: 14px;
+  border-radius: var(--cell-radius, 14px);
   min-height: 92px;
-  padding: 10px;
+  padding: 12px;
 
   /* PDF-safe: colores simples (html2canvas friendly) */
-  background: rgba(255, 255, 255, 0.90);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: var(--cell-bg, rgba(255, 255, 255, 0.96));
+  border: 1px solid var(--cell-border, rgba(0, 0, 0, 0.16));
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
 }
 
 /* Vacías */
@@ -92,19 +103,19 @@
 .cell.day {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 /* Maestro */
 .cell.day.master {
-  border-color: var(--accent-soft, rgba(0, 0, 0, 0.14));
-  background: rgba(255, 255, 255, 0.88);
+  border-color: var(--accent, rgba(0, 0, 0, 0.22));
+  background: rgba(255, 255, 255, 0.96);
 }
 
 /* Hoy */
 .cell.day.today {
-  outline: 2px solid var(--accent, rgba(0, 0, 0, 0.18));
-  outline-offset: 1px;
+  outline: 2px solid var(--accent, rgba(0, 0, 0, 0.28));
+  outline-offset: 2px;
 }
 
 /* Header de la celda */
@@ -116,20 +127,21 @@
 
 .dom {
   font-weight: 900;
-  font-size: 14px;
+  font-size: 20px;
   color: var(--ink);
   opacity: 0.95;
+  font-family: var(--font-accent, var(--font-body));
 }
 
 .badge {
   font-size: 11px;
-  opacity: 0.8;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  padding: 2px 6px;
+  opacity: 0.95;
+  border: 1px solid var(--accent, rgba(0, 0, 0, 0.22));
+  padding: 2px 8px;
   border-radius: 999px;
 
   /* Pequeño acento sin romper PDF */
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.98);
 }
 
 /* Día personal */
@@ -142,14 +154,15 @@
 
 .dp .label {
   font-size: 11px;
-  opacity: 0.72;
+  opacity: 0.7;
   color: var(--ink);
 }
 
 .dp .value {
-  font-size: 18px;
-  font-weight: 950;
-  color: var(--ink);
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--accent);
+  font-family: var(--font-accent, var(--font-body));
 }
 
 /* -----------------------
@@ -175,10 +188,11 @@
 .calendar.compact .cell {
   min-height: 62px;
   padding: 8px;
-  border-radius: 12px;
+  border-radius: calc(var(--cell-radius, 12px) - 2px);
 
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(0, 0, 0, 0.055);
+  background: var(--cell-bg, rgba(255, 255, 255, 0.88));
+  border: 1px solid var(--cell-border, rgba(0, 0, 0, 0.08));
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
 }
 
 .calendar.compact .dp .label {
@@ -186,7 +200,7 @@
 }
 
 .calendar.compact .dp .value {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 /* Ajustes para “vendible” */
@@ -202,8 +216,8 @@
    Export PDF (opcional)
 ------------------------ */
 body.pdf-exporting .calendar::before {
-  /* en PDF conviene un pelín menos para máxima legibilidad */
-  opacity: 0.12;
+  /* en PDF subimos un poco el arte */
+  opacity: 0.22;
 }
 
 body.pdf-exporting .cell {

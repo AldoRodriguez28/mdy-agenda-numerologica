@@ -20,6 +20,8 @@ import { MonthAgenda } from '../../core/models/agenda.model';
 import { MONTHS_ES, toISODateUTC } from '../../core/utils/calendar.util';
 import { MonthCalendarComponent } from './components/month-calendar/month-calendar.component';
 import { PdfExportService } from '../../core/services/pdf-export.service';
+import { ThemeService } from '../../core/services/theme.service';
+import { seasonForMonth } from '../../core/utils/season.util';
 
 @Component({
   selector: 'app-monthly-page',
@@ -33,6 +35,7 @@ export class MonthlyPage {
   private state = inject(ProfileStateService);
   private numerology = inject(NumerologyService);
   private pdf = inject(PdfExportService);
+  private theme = inject(ThemeService);
 
   // Se renderiza SOLO mientras se exporta (offscreen)
   @ViewChild('pdfPage', { static: false }) pdfPage?: ElementRef<HTMLElement>;
@@ -58,14 +61,18 @@ export class MonthlyPage {
     return this.numerology.buildMonthAgenda(this.profile(), this.selectedMonth());
   });
 
+  isSeasonal = computed(() => this.theme.themeId() === 'seasonal');
+  season = computed(() => seasonForMonth(this.selectedMonth()));
+
   async exportPdf(): Promise<void> {
     this.exporting.set(true);
 
     try {
       // Espera a que Angular pinte el DOM offscreen
       await nextFrame();
+      await nextFrame();
 
-      const el = this.pdfPage?.nativeElement;
+      const el = await this.waitForPdfElement();
       if (!el) return;
 
       const p = this.profile();
@@ -90,6 +97,16 @@ export class MonthlyPage {
     } finally {
       this.exporting.set(false);
     }
+  }
+
+  private async waitForPdfElement(timeoutMs = 1200): Promise<HTMLElement | null> {
+    const start = performance.now();
+    while (performance.now() - start < timeoutMs) {
+      const el = this.pdfPage?.nativeElement;
+      if (el) return el;
+      await nextFrame();
+    }
+    return null;
   }
 }
 

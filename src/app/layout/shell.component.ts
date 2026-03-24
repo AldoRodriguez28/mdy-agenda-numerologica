@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 import { ProfileStateService } from '../core/services/profile-state.service';
+import { ThemeService } from '../core/services/theme.service';
 
 @Component({
   selector: 'app-shell',
@@ -24,6 +25,8 @@ import { ProfileStateService } from '../core/services/profile-state.service';
 })
 export class ShellComponent {
   private state = inject(ProfileStateService);
+  // Mantiene el tema activo en cualquier ruta
+  private _theme = inject(ThemeService);
   hasProfile = computed(() => this.state.hasProfile());
 
   reset() {

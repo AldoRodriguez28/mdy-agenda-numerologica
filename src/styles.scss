@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=DM+Sans:wght@400;600;700&family=Marcellus&family=Playfair+Display:wght@500;700&family=Source+Sans+3:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap');
+
 :root {
   --paper: #ffffff;
   --ink: #141414;
@@ -11,10 +13,22 @@
 
   --toolbar-bg: #ffffff;
   --toolbar-fg: #141414;
+
+  --font-title: "Playfair Display", serif;
+  --font-body: "Source Sans 3", sans-serif;
+  --font-accent: "Playfair Display", serif;
+
+  --page-bg: #ffffff;
+  --page-border: rgba(0, 0, 0, 0.06);
+  --page-radius: 18px;
+
+  --cell-radius: 14px;
+  --cell-bg: rgba(255, 255, 255, 0.9);
+  --cell-border: rgba(0, 0, 0, 0.06);
 }
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: var(--font-body); background: var(--page-bg); }
 body.pdf-exporting {
   mat-card { box-shadow: none !important; }
 
